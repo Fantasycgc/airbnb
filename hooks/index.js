@@ -5,7 +5,9 @@ import { UserContext } from '@/providers/UserProvider';
 import { PlaceContext } from '@/providers/PlaceProvider';
 
 import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
-import axiosInstance from '@/utils/axios';
+// import axiosInstance from '@/utils/axios';
+import { apiInstance } from "@/config/axios.config.js"
+import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
 
 // USER
 export const useAuth = () => {
@@ -154,8 +156,10 @@ export const useProvidePlaces = () => {
     const [loading, setLoading] = useState(true);
 
     const getPlaces = async () => {
-        const { data } = await axiosInstance.get('/places');
-        setPlaces(data.places);
+        // const { data } = await axiosInstance.get('/places');
+        const data = await ROOMAPI.getRoomApi();
+        // console.log("data: ", data.content);
+        setPlaces(data.content);
         setLoading(false);
     };
 

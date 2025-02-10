@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import axiosInstance from '@/utils/axios';
+// import axiosInstance from '@/utils/axios';
+import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
 
 import Spinner from '@/components/ui/Spinner';
 import AddressLink from '@/components/ui/AddressLink';
@@ -22,8 +23,10 @@ const PlacePage = () => {
     setLoading(true);
 
     const getPlace = async () => {
-      const { data } = await axiosInstance.get(`/places/${id}`);
-      setPlace(data.place);
+      // const { data } = await axiosInstance.get(`/places/${id}`);
+      const  data  =await ROOMAPI.getRoomByID(`${id}`);
+      // console.log("data 11: ", data.content);
+      setPlace(data.content);
       setLoading(false);
     };
     getPlace();
@@ -39,7 +42,7 @@ const PlacePage = () => {
 
   return (
     <div className="mt-4 overflow-x-hidden px-8 pt-20 ">
-      <h1 className="text-3xl">{place.title}</h1>
+      <h1 className="text-3xl">{place.tenPhong}</h1>
 
       <AddressLink placeAddress={place.address} />
       <PlaceGallery place={place} />
@@ -48,23 +51,23 @@ const PlacePage = () => {
         <div className="">
           <div className="my-4 ">
             <h2 className="text-2xl font-semibold">Description</h2>
-            {place.description}
+            {place.moTa}
           </div>
-          Max number of guests: {place.maxGuests}
+          Max number of guests: {place.khach}
           <PerksWidget perks={place?.perks} />
         </div>
         <div>
           <BookingWidget place={place} />
         </div>
       </div>
-      <div className="-mx-8 border-t bg-white px-8 py-8">
+      {/* <div className="-mx-8 border-t bg-white px-8 py-8">
         <div>
           <h2 className="mt-4 text-2xl font-semibold">Extra Info</h2>
         </div>
         <div className="mb-4 mt-2 text-sm leading-5 text-gray-700">
           {place.extraInfo}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
