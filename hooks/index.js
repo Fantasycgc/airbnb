@@ -5,7 +5,11 @@ import { UserContext } from '@/providers/UserProvider';
 import { PlaceContext } from '@/providers/PlaceProvider';
 
 import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
-import axiosInstance from '@/utils/axios';
+// import axiosInstance from '@/utils/axios';
+import { apiInstance } from "@/config/axios.config.js"
+import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
+import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
+
 
 // USER
 export const useAuth = () => {
@@ -28,11 +32,12 @@ export const useProvideAuth = () => {
         const { name, email, password } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/register', {
-                name,
-                email,
-                password,
-            });
+            // const { data } = await axiosInstance.post('user/register', {
+            //     name,
+            //     email,
+            //     password,
+            // });
+            const data = await SIGNUPUSERAPI.AddUserApi(formData);
             if (data.user && data.token) {
                 setUser(data.user)
                 // save user and token in local storage
@@ -41,7 +46,9 @@ export const useProvideAuth = () => {
             }
             return { success: true, message: 'Registration successfull' }
         } catch (error) {
-            const { message } = error.response.data
+            // const { message } = error.response.data
+            const { message } = error.response.content
+
             return { success: false, message }
         }
     }
@@ -154,8 +161,10 @@ export const useProvidePlaces = () => {
     const [loading, setLoading] = useState(true);
 
     const getPlaces = async () => {
-        const { data } = await axiosInstance.get('/places');
-        setPlaces(data.places);
+        // const { data } = await axiosInstance.get('/places');
+        const data = await ROOMAPI.getRoomApi();
+        // console.log("data: ", data.content);
+        setPlaces(data.content);
         setLoading(false);
     };
 
