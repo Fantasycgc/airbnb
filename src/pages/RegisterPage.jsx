@@ -30,7 +30,7 @@ const RegisterPage = () => {
     } else {
       toast.error(response.message);
     }
-  };
+  }; 
 
   const handleGoogleLogin = async (credential) => {
     const response = await auth.googleLogin(credential);
