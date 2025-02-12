@@ -4,11 +4,16 @@ import jwt_decode from 'jwt-decode';
 import { UserContext } from '@/providers/UserProvider';
 import { PlaceContext } from '@/providers/PlaceProvider';
 
-import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
+// import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
+import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/config/index';
 // import axiosInstance from '@/utils/axios';
 import { apiInstance } from "@/config/axios.config.js"
 import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
 import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
+import { SIGNINUSERAPI } from '@/API/client/user/LoginUser';
+
+
+
 
 
 // USER
@@ -46,30 +51,30 @@ export const useProvideAuth = () => {
             }
             return { success: true, message: 'Registration successfull' }
         } catch (error) {
+
             // const { message } = error.response.data
-            const { message } = error.response.content
+            const message = error.response.content
 
             return { success: false, message }
         }
     }
 
     const login = async (formData) => {
-        const { email, password } = formData;
+        // const { email, password } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/login', {
-                email,
-                password,
-            });
-            if (data.user && data.token) {
+            const { data } = await SIGNINUSERAPI.LoginUserApi(formData);
+
+            if (data.content.user && data.content.token) {
                 setUser(data.user)
                 // save user and token in local storage
-                setItemsInLocalStorage('user', data.user)
-                setItemsInLocalStorage('token', data.token)
+                setItemsInLocalStorage('user', data.content.user)
+                setItemsInLocalStorage('token', data.content.token)
             }
             return { success: true, message: 'Login successfull' }
         } catch (error) {
-            const { message } = error.response.data
+            const { message } = error.response.data.content
+            console.log("message: ", message.response.data.content);
             return { success: false, message }
         }
     }
@@ -94,6 +99,7 @@ export const useProvideAuth = () => {
     }
 
     const logout = async () => {
+        debugger
         try {
             const { data } = await axiosInstance.get('/user/logout');
             if (data.success) {
