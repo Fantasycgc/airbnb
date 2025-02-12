@@ -11,6 +11,7 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
+    phone:''
   });
   const [redirect, setRedirect] = useState(false);
   const auth = useAuth();
@@ -70,6 +71,13 @@ const RegisterPage = () => {
             type="password"
             placeholder="password"
             value={formData.password}
+            onChange={handleFormData}
+          />
+          <input
+            name="phone"
+            type="text"
+            placeholder="09090909090"
+            value={formData.phone}
             onChange={handleFormData}
           />
           <button className="primary my-2">Register</button>

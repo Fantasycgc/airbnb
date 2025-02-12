@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-// import axiosInstance from '@/utils/axios';
-import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
+import axiosInstance from '@/config/axiosClient.js';
+// import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
 
 import Spinner from '@/components/ui/Spinner';
 import AddressLink from '@/components/ui/AddressLink';
@@ -23,8 +23,8 @@ const PlacePage = () => {
     setLoading(true);
 
     const getPlace = async () => {
-      // const { data } = await axiosInstance.get(`/places/${id}`);
-      const  data  =await ROOMAPI.getRoomByID(`${id}`);
+      const { data } = await axiosInstance.get(`/phong-thue/${id}`);
+      // const  data  =await ROOMAPI.getRoomByID(`${id}`);
       // console.log("data 11: ", data.content);
       setPlace(data.content);
       setLoading(false);

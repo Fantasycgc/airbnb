@@ -4,7 +4,7 @@ import { differenceInDays } from 'date-fns';
 import { toast } from 'react-toastify';
 
 import { useAuth } from '../../../hooks';
-import axiosInstance from '@/utils/axios';
+import axiosInstance from '@/config/axiosClient.js';
 import DatePickerWithRange from './DatePickerWithRange';
 
 const BookingWidget = ({ place }) => {
@@ -14,11 +14,13 @@ const BookingWidget = ({ place }) => {
     name: '',
     phone: '',
   });
+  
   const [redirect, setRedirect] = useState('');
   const { user } = useAuth();
+  // console.log("user: ", user.id);
 
   const { noOfGuests, name, phone } = bookingData;
-  const { _id: id, price } = place;
+  const { id: id, giaTien } = place;
 
   useEffect(() => {
     if (user) {
@@ -62,19 +64,34 @@ const BookingWidget = ({ place }) => {
     }
 
     try {
-      const response = await axiosInstance.post('/bookings', {
-        checkIn: dateRange.from,
-        checkOut: dateRange.to,
-        noOfGuests,
-        name,
-        phone,
-        place: id,
-        price: numberOfNights * giaTien,
+      // const response = await axiosInstance.post('/bookings', {
+      //   checkIn: dateRange.from,
+      //   checkOut: dateRange.to,
+      //   noOfGuests,
+      //   name,
+      //   phone,
+      //   place: id,
+      //   price: numberOfNights * giaTien,
+      // });
+          const response = await axiosInstance.post('/dat-phong', {
+            maPhong:id,
+            ngayDen:dateRange.from,
+            ngayDi:dateRange.to,
+            soLuongKhach:noOfGuests,
+            maNguoiDung: user.id
+        // checkIn: dateRange.from,
+        // checkOut: dateRange.to,
+        // noOfGuests,
+        // name,
+        // phone,
+        // place: id,
+        // price: numberOfNights * giaTien,
       });
 
-      const bookingId = response.data.booking.id;
+      const bookingId = response.data.content.id;
 
-      setRedirect(`/account/bookings/${bookingId}`);
+      // setRedirect(`/account/bookings/${bookingId}`);
+      setRedirect(`/account/bookings/`);
       toast('Congratulations! Enjoy your trip.');
     } catch (error) {
       toast.error('Something went wrong!');
