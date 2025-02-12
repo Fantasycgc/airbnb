@@ -1,11 +1,11 @@
 import { apiInstance } from "@/config/axios.config.js"
-const baseUrl = 'https://airbnbnew.cybersoft.edu.vn/api/auth/signup'
-export const SIGNUPUSERAPI = {
-    AddUserApi: async (formData) => {
-        const { name, email, password } = formData;
+const baseUrl = 'https://airbnbnew.cybersoft.edu.vn/api/auth/signin'
+export const SIGNINUSERAPI = {
+    LoginUserApi: async (formData) => {
+        const { email, password } = formData;
         try {
             const data = await apiInstance().post(`${baseUrl}/`, {
-                name, email, password
+                email, password
             }
             );
             console.log(data)
@@ -13,7 +13,7 @@ export const SIGNUPUSERAPI = {
             return data;
         } catch (error) {
 
-            console.error("Error fetching location:", error);
+            console.error("Error fetching data:", error);
         }
     }
 }
