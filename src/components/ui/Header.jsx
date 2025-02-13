@@ -13,6 +13,7 @@ export const Header = () => {
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [hasShadow, setHasShadow] = useState(false);
   const { user } = auth;
+ 
 
   const handleScroll = () => {
     const shouldHaveShadow = window.scrollY > 0;
@@ -32,6 +33,7 @@ export const Header = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+   
   }, [location]);
 
   return (

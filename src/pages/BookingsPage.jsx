@@ -5,15 +5,12 @@ import AccountNav from '@/components/ui/AccountNav';
 import PlaceImg from '@/components/ui/PlaceImg';
 import BookingDates from '@/components/ui/BookingDates';
 import Spinner from '@/components/ui/Spinner';
-// import axiosInstance from '@/utils/axios';
 import axiosInstance from '@/config/axiosClient.js';
-import { useAuth } from '../../hooks/index.js';
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
- const { user } = useAuth();
- 
+
   useEffect(() => {
     const getBookings = async () => {
       try {

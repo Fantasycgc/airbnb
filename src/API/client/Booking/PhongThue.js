@@ -6,7 +6,7 @@ export const ROOMAPI = {
             const { data } = await apiInstance().get(
                 `${baseUrl}/phong-thue`
             );
-            console.log('getrooom', data)
+            // console.log('getrooom', data)
             return data;
         } catch (error) {
             console.error("Error fetching location:", error);
@@ -18,7 +18,7 @@ export const ROOMAPI = {
             const { data } = await apiInstance().get(
                 `${baseUrl}/phong-thue/${id}`
             );
-            console.log('getrooom', data)
+            // console.log('getrooom', data)
             return data;
         } catch (error) {
             console.error("Error fetching location:", error);

@@ -25,15 +25,14 @@ export const useAuth = () => {
 export const useProvideAuth = () => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-
     useEffect(() => {
         const storedUser = getItemFromLocalStorage('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
         setLoading(false)
-    }, [])
 
+    }, [])
     const register = async (formData) => {
         const { name, email, password, phone } = formData;
 
@@ -102,16 +101,16 @@ export const useProvideAuth = () => {
     }
 
     const logout = async () => {
-        debugger
-        try {
-            const { data } = await axiosInstance.get('/user/logout');
-            if (data.success) {
-                setUser(null);
 
-                // Clear user data and token from localStorage when logging out
-                removeItemFromLocalStorage('user');
-                removeItemFromLocalStorage('token');
-            }
+        try {
+            // const { data } = await axiosInstance.get('/user/logout');
+            // if (data.success) {
+            setUser(null);
+
+            // Clear user data and token from localStorage when logging out
+            removeItemFromLocalStorage('user');
+            removeItemFromLocalStorage('token');
+            // }
             return { success: true, message: 'Logout successfull' }
         } catch (error) {
             console.log(error)

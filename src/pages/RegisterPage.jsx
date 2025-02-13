@@ -80,6 +80,7 @@ const RegisterPage = () => {
             value={formData.phone}
             onChange={handleFormData}
           />
+          
           <button className="primary my-2">Register</button>
         </form>
 

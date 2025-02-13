@@ -1,6 +1,9 @@
 import React from 'react';
 
 const PerksWidget = ({ perks }) => {
+  console.log("perks: ", perks);
+ 
+  
   return (
     <div className="mt-4">
       <hr className="mb-5 border" />

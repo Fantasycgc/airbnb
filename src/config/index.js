@@ -1,5 +1,5 @@
 export const setItemsInLocalStorage = (key, value) => {
-    debugger
+
     if (!key || !value) {
         return console.error('Cannot store in LS');
     }

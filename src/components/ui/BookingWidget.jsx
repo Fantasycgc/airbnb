@@ -64,34 +64,20 @@ const BookingWidget = ({ place }) => {
     }
 
     try {
-      // const response = await axiosInstance.post('/bookings', {
-      //   checkIn: dateRange.from,
-      //   checkOut: dateRange.to,
-      //   noOfGuests,
-      //   name,
-      //   phone,
-      //   place: id,
-      //   price: numberOfNights * giaTien,
-      // });
+
           const response = await axiosInstance.post('/dat-phong', {
             maPhong:id,
             ngayDen:dateRange.from,
             ngayDi:dateRange.to,
             soLuongKhach:noOfGuests,
             maNguoiDung: user.id
-        // checkIn: dateRange.from,
-        // checkOut: dateRange.to,
-        // noOfGuests,
-        // name,
-        // phone,
-        // place: id,
-        // price: numberOfNights * giaTien,
+
       });
 
       const bookingId = response.data.content.id;
 
       // setRedirect(`/account/bookings/${bookingId}`);
-      setRedirect(`/account/bookings/`);
+      setRedirect(`/account/bookings/${bookingId}`);
       toast('Congratulations! Enjoy your trip.');
     } catch (error) {
       toast.error('Something went wrong!');
