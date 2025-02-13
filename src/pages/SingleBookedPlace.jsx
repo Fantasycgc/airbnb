@@ -7,28 +7,26 @@ import BookingDates from '../components/ui/BookingDates';
 import PlaceGallery from '../components/ui/PlaceGallery';
 import Spinner from '../components/ui/Spinner';
 import axiosInstance from '@/config/axiosClient.js';
-import { useAuth } from '../../hooks/index.js';
 
 const SingleBookedPlace = () => {
   const { id } = useParams();
-  console.log("id: ", id);
-  // const [booking, setBooking] = useState({});
-  const [booking, setBooking] = useState([]);
+  const [booking, setBooking] = useState({});
+  
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+
   const getBookings = async () => {
     try {
-      
       setLoading(true);
       const { data } = await axiosInstance.get(`/dat-phong/${id}`);
       console.log("data: ", data);
+
       // filter the data to get current booking
-      // const filteredBooking = data.content.filter(
-      //   (content) => content.id === id,
+      // const filteredBooking = data.booking.filter(
+      //   (booking) => booking.id === id,
       // );
-      // console.log("ac",filteredBooking);
-      setBooking(data);
-      // setBooking(data.content);
+
+       setBooking(data.content);
+   
     } catch (error) {
       console.log('Error: ', error);
     } finally {
@@ -47,15 +45,9 @@ const SingleBookedPlace = () => {
   return (
     <div>
       <AccountNav />
-      {booking?.place ? (
+      {booking.id ?  (
         <div className="p-4">
-          {/* <h1 className="text-3xl">{booking?.place?.title}</h1> */}
-          <h1 className="text-3xl">{booking?.place?.title}</h1>
-
-          <AddressLink
-            className="my-2 block"
-            placeAddress={booking.place?.address}
-          />
+          <h1 className="text-3xl">{booking?.place?.title}</h1>     
           <div className="my-6 flex flex-col items-center justify-between rounded-2xl bg-gray-200 p-6 sm:flex-row">
             <div className=" ">
               <h2 className="mb-4 text-2xl md:text-2xl">
@@ -63,14 +55,14 @@ const SingleBookedPlace = () => {
               </h2>
               <BookingDates booking={booking} />
             </div>
-            <div className="mt-5 w-full rounded-2xl bg-primary p-6 text-white sm:mt-0 sm:w-auto">
+            {/* <div className="mt-5 w-full rounded-2xl bg-primary p-6 text-white sm:mt-0 sm:w-auto">
               <div className="hidden md:block">Total price</div>
               <div className="flex justify-center text-3xl">
                 <span>₹{booking?.price}</span>
               </div>
-            </div>
+            </div> */}
           </div>
-          <PlaceGallery place={booking?.place} />
+          {/* <PlaceGallery place={booking?.place} /> */}
         </div>
       ) : (
         <h1> No data</h1>
