@@ -54,7 +54,7 @@ const AccountNav = () => {
         </svg>
         My bookings
       </Link>
-      <Link className={linkClases('places')} to={'/account/places'}>
+      {/* <Link className={linkClases('places')} to={'/account/places'}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -70,7 +70,7 @@ const AccountNav = () => {
           />
         </svg>
         My accomodations
-      </Link>
+      </Link> */}
     </nav>
   );
 };

@@ -8,9 +8,10 @@ import { PlaceContext } from '@/providers/PlaceProvider';
 import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/config/index';
 // import axiosInstance from '@/utils/axios';
 import { apiInstance } from "@/config/axios.config.js"
+import axiosInstance from '@/config/axiosClient.js';
 import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
-import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
-import { SIGNINUSERAPI } from '@/API/client/user/LoginUser';
+// import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
+// import { SIGNINUSERAPI } from '@/API/client/user/LoginUser';
 
 
 
@@ -34,15 +35,16 @@ export const useProvideAuth = () => {
     }, [])
 
     const register = async (formData) => {
-        const { name, email, password } = formData;
+        const { name, email, password, phone } = formData;
 
         try {
-            // const { data } = await axiosInstance.post('user/register', {
-            //     name,
-            //     email,
-            //     password,
-            // });
-            const data = await SIGNUPUSERAPI.AddUserApi(formData);
+            const { data } = await axiosInstance.post('/auth/signup', {
+                name,
+                email,
+                password,
+                phone
+            });
+            // const data = await SIGNUPUSERAPI.AddUserApi(formData);
             if (data.user && data.token) {
                 setUser(data.user)
                 // save user and token in local storage
@@ -51,8 +53,6 @@ export const useProvideAuth = () => {
             }
             return { success: true, message: 'Registration successfull' }
         } catch (error) {
-
-            // const { message } = error.response.data
             const message = error.response.content
 
             return { success: false, message }
@@ -60,10 +60,14 @@ export const useProvideAuth = () => {
     }
 
     const login = async (formData) => {
-        // const { email, password } = formData;
+        const { email, password } = formData;
 
         try {
-            const { data } = await SIGNINUSERAPI.LoginUserApi(formData);
+
+            const { data } = await axiosInstance.post('/auth/signin', {
+                email,
+                password,
+            });
 
             if (data.content.user && data.content.token) {
                 setUser(data.user)
@@ -73,8 +77,7 @@ export const useProvideAuth = () => {
             }
             return { success: true, message: 'Login successfull' }
         } catch (error) {
-            const { message } = error.response.data.content
-            console.log("message: ", message.response.data.content);
+            const { message } = error.response.data
             return { success: false, message }
         }
     }
@@ -167,8 +170,8 @@ export const useProvidePlaces = () => {
     const [loading, setLoading] = useState(true);
 
     const getPlaces = async () => {
-        // const { data } = await axiosInstance.get('/places');
-        const data = await ROOMAPI.getRoomApi();
+        const { data } = await axiosInstance.get('/phong-thue');
+        // const data = await ROOMAPI.getRoomApi();
         // console.log("data: ", data.content);
         setPlaces(data.content);
         setLoading(false);

@@ -6,24 +6,29 @@ import AddressLink from '../components/ui/AddressLink';
 import BookingDates from '../components/ui/BookingDates';
 import PlaceGallery from '../components/ui/PlaceGallery';
 import Spinner from '../components/ui/Spinner';
-import axiosInstance from '../utils/axios';
+import axiosInstance from '@/config/axiosClient.js';
+import { useAuth } from '../../hooks/index.js';
 
 const SingleBookedPlace = () => {
   const { id } = useParams();
-  const [booking, setBooking] = useState({});
+  console.log("id: ", id);
+  // const [booking, setBooking] = useState({});
+  const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const { user } = useAuth();
   const getBookings = async () => {
     try {
+      
       setLoading(true);
-      const { data } = await axiosInstance.get('/bookings');
-
+      const { data } = await axiosInstance.get(`/dat-phong/${id}`);
+      console.log("data: ", data);
       // filter the data to get current booking
-      const filteredBooking = data.booking.filter(
-        (booking) => booking._id === id,
-      );
-
-      setBooking(filteredBooking[0]);
+      // const filteredBooking = data.content.filter(
+      //   (content) => content.id === id,
+      // );
+      // console.log("ac",filteredBooking);
+      setBooking(data);
+      // setBooking(data.content);
     } catch (error) {
       console.log('Error: ', error);
     } finally {
@@ -44,6 +49,7 @@ const SingleBookedPlace = () => {
       <AccountNav />
       {booking?.place ? (
         <div className="p-4">
+          {/* <h1 className="text-3xl">{booking?.place?.title}</h1> */}
           <h1 className="text-3xl">{booking?.place?.title}</h1>
 
           <AddressLink
