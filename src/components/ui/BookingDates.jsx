@@ -1,7 +1,7 @@
 import React from 'react';
 import { differenceInCalendarDays, format } from 'date-fns';
 
-const BookingDates = ({ booking, className }) => {
+const BookingDates = ({ booking,roomDetails, className }) => {
   return (
     <div className={'flex gap-1 ' + className}>
       <svg
@@ -57,6 +57,10 @@ const BookingDates = ({ booking, className }) => {
         </svg>
         {format(new Date(booking.ngayDi), 'dd-MM-yyyy')}
       </div>
+      <div>
+        
+      </div>
+      
     </div>
   );
 };

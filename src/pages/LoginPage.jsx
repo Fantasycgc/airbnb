@@ -22,6 +22,7 @@ const LoginPage = () => {
     const response = await auth.login(formData);
     if (response.success) {
       toast.success(response.message);
+      
       setRedirect(true);
     } else {
       toast.error(response.message);
