@@ -11,9 +11,9 @@ import axiosInstance from '@/config/axiosClient.js';
 const SingleBookedPlace = () => {
   const { id } = useParams();
   const [booking, setBooking] = useState({});
-  
+  const [roomDetails, setRoomDetails] = useState({}); // State mới cho chi tiết phòng
   const [loading, setLoading] = useState(false);
-
+  const [roomDetailsLoading, setRoomDetailsLoading] = useState(false); // Loading state cho chi tiết phòng
   const getBookings = async () => {
     try {
       setLoading(true);
@@ -26,6 +26,9 @@ const SingleBookedPlace = () => {
       // );
 
        setBooking(data.content);
+       if (data.content && data.content.maPhong) { // Kiểm tra maPhong tồn tại
+        getRoomDetails(data.content.maPhong);
+      }
    
     } catch (error) {
       console.log('Error: ', error);
@@ -33,7 +36,19 @@ const SingleBookedPlace = () => {
       setLoading(false);
     }
   };
-
+  const getRoomDetails = async (maPhong) => {
+    try {
+      setRoomDetailsLoading(true);
+      const { data } = await axiosInstance.get(`/phong-thue/${maPhong}`); // API endpoint cho chi tiết phòng
+     
+      setRoomDetails(data.content); // Giả sử API trả về data.content là thông tin chi tiết phòng
+      console.log("Room Details:", data.content);
+    } catch (error) {
+      console.error('Error getting room details:', error);
+    } finally {
+      setRoomDetailsLoading(false);
+    }
+  };
   useEffect(() => {
     getBookings();
   }, [id]);
@@ -53,7 +68,12 @@ const SingleBookedPlace = () => {
               <h2 className="mb-4 text-2xl md:text-2xl">
                 Your booking information
               </h2>
-              <BookingDates booking={booking} />
+              {/* <BookingDates booking={booking} /> */}
+                   {/* Truyền dữ liệu vào component BookingDates */}
+          {booking && roomDetails && (
+            <BookingDates booking={booking} roomDetails={roomDetails} />
+          )}
+              
             </div>
             {/* <div className="mt-5 w-full rounded-2xl bg-primary p-6 text-white sm:mt-0 sm:w-auto">
               <div className="hidden md:block">Total price</div>

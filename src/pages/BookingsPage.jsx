@@ -34,7 +34,7 @@ const BookingsPage = () => {
         {bookings?.length > 0 ? (
           bookings.map((booking) => (
             <Link
-              to={`/account/bookings/${booking._id}`}
+              to={`/account/bookings/${booking.id}`}
               className="mx-4 my-8 flex h-28 gap-4 overflow-hidden rounded-2xl bg-gray-200 md:h-40 lg:mx-0"
               key={booking._id}
             >
