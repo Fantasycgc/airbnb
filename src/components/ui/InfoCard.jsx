@@ -7,7 +7,7 @@ const InfoCard = ({ place }) => {
     <Link
       to={`/account/places/${place.id}`}
       className="my-3 flex cursor-pointer flex-col gap-4 rounded-2xl bg-gray-100 p-4 transition-all hover:bg-gray-300 md:flex-row"
-      key={place._id}
+      key={place.id}
     >
       <div className="flex w-full shrink-0 bg-gray-300 sm:h-32 sm:w-32 ">
         <PlaceImg place={place} />

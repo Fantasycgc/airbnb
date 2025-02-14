@@ -2,8 +2,12 @@ import React from 'react';
 import { differenceInCalendarDays, format } from 'date-fns';
 
 const BookingDates = ({ booking,roomDetails, className }) => {
+  if (!booking || !roomDetails) { 
+    return <div>Loading booking dates...</div>; 
+  }
   return (
-    <div className={'flex gap-1 ' + className}>
+    <div className={'flex flex-col gap-4 ' + className}>
+    <div className={'flex items-center gap-1 ' + className}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -56,11 +60,38 @@ const BookingDates = ({ booking,roomDetails, className }) => {
           />
         </svg>
         {format(new Date(booking.ngayDi), 'dd-MM-yyyy')}
-      </div>
-      <div>
-        
+   
       </div>
       
+      <div>
+        
+     </div>
+      
+    </div>
+    <div className="mt-2 border rounded p-4">
+        <div className="flex flex-col md:flex-row gap-4"> 
+            <div className="md:w-1/2"> 
+              <h3 className="text-lg font-semibold mb-2">Detail phòng</h3> 
+              <p>Type: {roomDetails?.tenPhong || "N/A"}</p>
+            </div>
+            <div className="md:w-1/2"> 
+              <h3 className="text-lg font-semibold mb-2">Image Room</h3> 
+           
+              {roomDetails.hinhAnh && roomDetails.hinhAnh.length > 0 ? (
+                <div className="flex flex-wrap gap-2"> 
+                
+                    <img
+                    src={`${roomDetails.hinhAnh}`}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+              
+                </div>
+              ) : (
+                <p>No images available.</p>
+              )}
+            </div>
+          </div>
+      </div>
     </div>
   );
 };

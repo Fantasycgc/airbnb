@@ -17,7 +17,7 @@ const BookingWidget = ({ place }) => {
   
   const [redirect, setRedirect] = useState('');
   const { user } = useAuth();
-  // console.log("user: ", user.id);
+ 
 
   const { noOfGuests, name, phone } = bookingData;
   const { id: id, giaTien } = place;
@@ -122,7 +122,7 @@ const BookingWidget = ({ place }) => {
           <input
             type="tel"
             name="phone"
-            value={phone}
+            value={place.phone}
             onChange={handleBookingData}
           />
         </div>
