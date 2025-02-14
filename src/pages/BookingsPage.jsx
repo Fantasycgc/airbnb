@@ -6,17 +6,50 @@ import PlaceImg from '@/components/ui/PlaceImg';
 import BookingDates from '@/components/ui/BookingDates';
 import Spinner from '@/components/ui/Spinner';
 import axiosInstance from '@/config/axiosClient.js';
+import { useAuth } from '../../hooks/index.js';
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [roomDetails, setRoomDetails] = useState({});
+  const { user } = useAuth();
 
   useEffect(() => {
+    
     const getBookings = async () => {
       try {
-        const { data } = await axiosInstance.get('/bookings');
-        setBookings(data.booking);
+        const getUser = localStorage.getItem('user');
+        if (!getUser) {
+          console.error("User data not found in local storage.");
+          setLoading(false);
+          return;
+        }
+        const user = JSON.parse(getUser); 
+                const userId = user.id; 
+                if (!userId) {
+                    console.error("User ID not found in parsed user data.");
+                    setLoading(false);
+                    return;
+                }
+        const { data } = await axiosInstance.get(`/dat-phong/lay-theo-nguoi-dung/${userId}`);
+       
+         setBookings(data.content);
         setLoading(false);
+        data.content.forEach(async (booking) => {
+          try {
+              const roomResponse = await axiosInstance.get(`/phong-thue/${booking.maPhong}`); 
+              console.log("roomResponse: ", roomResponse);
+          
+              setRoomDetails(prevState => ({
+                  ...prevState,
+                  [booking.room]: roomResponse.data.content, 
+              }));
+            
+          } catch (roomError) {
+              console.error(`Error fetching room details for room ${booking.room}: `, roomError);
+          }
+      });
+        
       } catch (error) {
         console.log('Error: ', error);
         setLoading(false);
@@ -36,10 +69,10 @@ const BookingsPage = () => {
             <Link
               to={`/account/bookings/${booking.id}`}
               className="mx-4 my-8 flex h-28 gap-4 overflow-hidden rounded-2xl bg-gray-200 md:h-40 lg:mx-0"
-              key={booking._id}
+              key={booking.id}
             >
               <div className="w-2/6 md:w-1/6">
-                {booking?.place?.photos[0] && (
+                {booking.photos && (
                   <PlaceImg
                     place={booking?.place}
                     className={'h-full w-full object-cover'}
@@ -51,10 +84,17 @@ const BookingsPage = () => {
                 <div className="md:text-xl">
                   <div className="flex gap-2 border-t "></div>
                   <div className="md:text-xl">
-                    <BookingDates
-                      booking={booking}
-                      className="mb-2 mt-4 hidden items-center text-gray-600  md:flex"
-                    />
+              {/* Display room details */}
+              {roomDetails[booking.room] && (
+                                            <div>
+                                                <h3>Room Details:</h3>
+                                                <p>Room Name: {roomDetails[booking.room].tenPhong}</p> 
+                                                <p>Description: {roomDetails[booking.room].moTa}</p> 
+                                                <p>Price: {roomDetails[booking.room].giaTien}</p> 
+                                                <p>Image: <img src={`${roomDetails[booking.room].hinhAnh}`}></img> </p> 
+                                              
+                                            </div>
+                                        )}
 
                     <div className="my-2 flex items-center gap-1">
                       <svg
@@ -71,9 +111,7 @@ const BookingsPage = () => {
                           d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
                         />
                       </svg>
-                      <span className="text-xl md:text-2xl">
-                        Total price: ₹{booking.price}
-                      </span>
+                
                     </div>
                   </div>
                 </div>

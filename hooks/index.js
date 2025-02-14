@@ -7,7 +7,7 @@ import { PlaceContext } from '@/providers/PlaceProvider';
 // import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
 import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/config/index';
 // import axiosInstance from '@/utils/axios';
-import { apiInstance } from "@/config/axios.config.js"
+// import { apiInstance } from "@/config/axios.config.js"
 import axiosInstance from '@/config/axiosClient.js';
 import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
 // import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
@@ -69,7 +69,7 @@ export const useProvideAuth = () => {
             });
 
             if (data.content.user && data.content.token) {
-                setUser(data.user)
+                setUser(data.content.user)
                 // save user and token in local storage
                 setItemsInLocalStorage('user', data.content.user)
                 setItemsInLocalStorage('token', data.content.token)
@@ -132,6 +132,7 @@ export const useProvideAuth = () => {
     }
 
     const updateUser = async (userDetails) => {
+
         const { name, password, picture } = userDetails;
         const email = JSON.parse(getItemFromLocalStorage('user')).email
         try {

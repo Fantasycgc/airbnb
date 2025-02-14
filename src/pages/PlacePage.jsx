@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import axiosInstance from '@/config/axiosClient.js';
-// import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
+
 
 import Spinner from '@/components/ui/Spinner';
 import AddressLink from '@/components/ui/AddressLink';

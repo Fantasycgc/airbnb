@@ -18,15 +18,12 @@ const SingleBookedPlace = () => {
     try {
       setLoading(true);
       const { data } = await axiosInstance.get(`/dat-phong/${id}`);
-      console.log("data: ", data);
+     
 
-      // filter the data to get current booking
-      // const filteredBooking = data.booking.filter(
-      //   (booking) => booking.id === id,
-      // );
+    
 
        setBooking(data.content);
-       if (data.content && data.content.maPhong) { // Kiểm tra maPhong tồn tại
+       if (data.content && data.content.maPhong) { 
         getRoomDetails(data.content.maPhong);
       }
    
@@ -39,10 +36,10 @@ const SingleBookedPlace = () => {
   const getRoomDetails = async (maPhong) => {
     try {
       setRoomDetailsLoading(true);
-      const { data } = await axiosInstance.get(`/phong-thue/${maPhong}`); // API endpoint cho chi tiết phòng
+      const { data } = await axiosInstance.get(`/phong-thue/${maPhong}`); 
      
-      setRoomDetails(data.content); // Giả sử API trả về data.content là thông tin chi tiết phòng
-      console.log("Room Details:", data.content);
+      setRoomDetails(data.content); 
+      // console.log("Room Details:", data.content);
     } catch (error) {
       console.error('Error getting room details:', error);
     } finally {
