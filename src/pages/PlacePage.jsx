@@ -7,8 +7,10 @@ import axiosInstance from '@/config/axiosClient.js';
 import Spinner from '@/components/ui/Spinner';
 import AddressLink from '@/components/ui/AddressLink';
 import BookingWidget from '@/components/ui/BookingWidget';
+
 import PlaceGallery from '@/components/ui/PlaceGallery';
 import PerksWidget from '@/components/ui/PerksWidget';
+import CommentWidget from '@/components/ui/CommentWidget';
 
 const PlacePage = () => {
   const { id } = useParams();
@@ -175,7 +177,7 @@ const PlacePage = () => {
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          class="h-6 w-6"
+          className="h-6 w-6"
         >
           <rect x="3" y="3" width="18" height="14" rx="2" ry="2" stroke="currentColor" />
 
@@ -224,14 +226,12 @@ const PlacePage = () => {
           <BookingWidget place={place} />
         </div>
       </div>
-      {/* <div className="-mx-8 border-t bg-white px-8 py-8">
-        <div>
-          <h2 className="mt-4 text-2xl font-semibold">Extra Info</h2>
-        </div>
+      <div className="-mx-8 border-t bg-white px-8 py-8">
+        
         <div className="mb-4 mt-2 text-sm leading-5 text-gray-700">
-          {place.extraInfo}
+          <CommentWidget place={place}/>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
