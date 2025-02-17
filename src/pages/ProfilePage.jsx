@@ -90,7 +90,7 @@ const ProfilePage = () => {
           </div>
         </div>
       )}
-      {subpage === 'places' && <PlacesPage />}
+      {/* {subpage === 'places' && <PlacesPage />} */}
     </div>
   );
 };

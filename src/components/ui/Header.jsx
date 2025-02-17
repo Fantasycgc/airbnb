@@ -13,6 +13,8 @@ export const Header = () => {
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [hasShadow, setHasShadow] = useState(false);
   const { user } = auth;
+  
+ 
 
   const handleScroll = () => {
     const shouldHaveShadow = window.scrollY > 0;
@@ -32,6 +34,7 @@ export const Header = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+   
   }, [location]);
 
   return (
@@ -80,7 +83,9 @@ export const Header = () => {
 
           <div className="z-10 h-[35px] w-[35px] overflow-hidden rounded-full">
             {user ? (
+              
               <Avatar>
+               
                 {user?.picture ? (
                   <AvatarImage src={user.picture} className="h-full w-full" />
                 ) : (

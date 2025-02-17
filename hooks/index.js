@@ -4,8 +4,18 @@ import jwt_decode from 'jwt-decode';
 import { UserContext } from '@/providers/UserProvider';
 import { PlaceContext } from '@/providers/PlaceProvider';
 
-import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
-import axiosInstance from '@/utils/axios';
+// import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/utils';
+import { getItemFromLocalStorage, setItemsInLocalStorage, removeItemFromLocalStorage } from '@/config/index';
+// import axiosInstance from '@/utils/axios';
+// import { apiInstance } from "@/config/axios.config.js"
+import axiosInstance from '@/config/axiosClient.js';
+import { ROOMAPI } from "@/API/client/Booking/PhongThue.js";
+// import { SIGNUPUSERAPI } from '@/API/client/user/RegisterUser';
+// import { SIGNINUSERAPI } from '@/API/client/user/LoginUser';
+
+
+
+
 
 // USER
 export const useAuth = () => {
@@ -15,24 +25,25 @@ export const useAuth = () => {
 export const useProvideAuth = () => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-
     useEffect(() => {
         const storedUser = getItemFromLocalStorage('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
         setLoading(false)
-    }, [])
 
+    }, [])
     const register = async (formData) => {
-        const { name, email, password } = formData;
+        const { name, email, password, phone } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/register', {
+            const { data } = await axiosInstance.post('/auth/signup', {
                 name,
                 email,
                 password,
+                phone
             });
+            // const data = await SIGNUPUSERAPI.AddUserApi(formData);
             if (data.user && data.token) {
                 setUser(data.user)
                 // save user and token in local storage
@@ -41,7 +52,8 @@ export const useProvideAuth = () => {
             }
             return { success: true, message: 'Registration successfull' }
         } catch (error) {
-            const { message } = error.response.data
+            const message = error.response.content
+
             return { success: false, message }
         }
     }
@@ -50,15 +62,17 @@ export const useProvideAuth = () => {
         const { email, password } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/login', {
+
+            const { data } = await axiosInstance.post('/auth/signin', {
                 email,
                 password,
             });
-            if (data.user && data.token) {
-                setUser(data.user)
+
+            if (data.content.user && data.content.token) {
+                setUser(data.content.user)
                 // save user and token in local storage
-                setItemsInLocalStorage('user', data.user)
-                setItemsInLocalStorage('token', data.token)
+                setItemsInLocalStorage('user', data.content.user)
+                setItemsInLocalStorage('token', data.content.token)
             }
             return { success: true, message: 'Login successfull' }
         } catch (error) {
@@ -87,15 +101,16 @@ export const useProvideAuth = () => {
     }
 
     const logout = async () => {
-        try {
-            const { data } = await axiosInstance.get('/user/logout');
-            if (data.success) {
-                setUser(null);
 
-                // Clear user data and token from localStorage when logging out
-                removeItemFromLocalStorage('user');
-                removeItemFromLocalStorage('token');
-            }
+        try {
+            // const { data } = await axiosInstance.get('/user/logout');
+            // if (data.success) {
+            setUser(null);
+
+            // Clear user data and token from localStorage when logging out
+            removeItemFromLocalStorage('user');
+            removeItemFromLocalStorage('token');
+            // }
             return { success: true, message: 'Logout successfull' }
         } catch (error) {
             console.log(error)
@@ -117,6 +132,7 @@ export const useProvideAuth = () => {
     }
 
     const updateUser = async (userDetails) => {
+
         const { name, password, picture } = userDetails;
         const email = JSON.parse(getItemFromLocalStorage('user')).email
         try {
@@ -154,8 +170,10 @@ export const useProvidePlaces = () => {
     const [loading, setLoading] = useState(true);
 
     const getPlaces = async () => {
-        const { data } = await axiosInstance.get('/places');
-        setPlaces(data.places);
+        const { data } = await axiosInstance.get('/phong-thue');
+        // const data = await ROOMAPI.getRoomApi();
+        // console.log("data: ", data.content);
+        setPlaces(data.content);
         setLoading(false);
     };
 

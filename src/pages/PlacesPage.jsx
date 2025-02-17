@@ -55,7 +55,7 @@ const PlacesPage = () => {
       </div>
       <div className="mx-4 mt-4">
         {places.length > 0 &&
-          places.map((place) => <InfoCard place={place} key={place._id} />)}
+          places.map((place) => <InfoCard place={place} key={place.id} />)}
       </div>
     </div>
   );
