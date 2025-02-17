@@ -3,13 +3,17 @@ import { toast } from 'react-toastify';
 
 import { useAuth } from '../../../hooks';
 import axiosInstance from '@/config/axiosClient.js';
+import { Rating } from 'react-simple-star-rating';
+import moment from 'moment';
 
 const CommentWidget = ({ place }) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const [editingCommentId, setEditingCommentId] = useState(null); 
   const [editedComment, setEditedComment] = useState(''); 
+  const [rating, setRating] = useState(0);
   const { user } = useAuth();
+  
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -17,7 +21,7 @@ const CommentWidget = ({ place }) => {
         const response = await axiosInstance.get(`/binh-luan/lay-binh-luan-theo-phong/${place.id}`);
         setComments(response.data.content);
       } catch (error) {
-        console.error("Comment Error:", error);
+        console.error("Lỗi khi lấy bình luận:", error);
         toast.error("Comment Error.");
       }
     };
@@ -28,7 +32,9 @@ const CommentWidget = ({ place }) => {
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
-
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+};
   const handlePostComment = async () => {
     if (!user) {
       return toast.error("You must login!");
@@ -39,10 +45,13 @@ const CommentWidget = ({ place }) => {
     }
 
     try {
+      const currentTime=moment().format('DD-MM-YYYY HH:mm:ss')
       const response = await axiosInstance.post('/binh-luan', {
         maPhong: place.id,
-        maNguoiDung: user.id,
+        maNguoiBinhLuan: user.id,
+        ngayBinhLuan: currentTime,
         noiDung: comment,
+        // saoBinhLuan: rating,
       });
 
       setComments([...comments, response.data.content]);
@@ -105,7 +114,16 @@ const CommentWidget = ({ place }) => {
         <ul className="space-y-2">
           {comments.map((c) => (
             <li key={c.id} className="border rounded p-2">
-              <div className="font-semibold">{c.tenNguoiBinhLuan || 'Anonymous'}</div>
+              <div className="flex items-center">
+                                <div className="font-semibold mr-2">{c.tenNguoiBinhLuan || "Ẩn danh"}</div>
+                                {/* <Rating
+                                    initialValue={c.saoBinhLuan || 0}
+                                    readonly={true}
+                                    size={20}
+                                /> */}
+                            </div>
+                            <p className="text-sm text-gray-500">{moment(c.ngayBinhLuan).format('DD/MM/YYYY HH:mm')}</p>
+              
               {editingCommentId === c.id ? ( 
                 <div>
                   <textarea
@@ -125,13 +143,13 @@ const CommentWidget = ({ place }) => {
                 <p>{c.noiDung}</p>
               )}
              
-              {user && user.id === c.maNguoiDung && (
+              {user && user.id === c.maNguoiBinhLuan && (
                 <div className="mt-2">
                   <button onClick={() => handleEditComment(c)} className="secondary mr-2">
-                    Edit
+                    Sửa
                   </button>
                   <button onClick={() => handleDeleteComment(c)} className="danger">
-                    Delete
+                    Xóa
                   </button>
                 </div>
               )}
@@ -143,6 +161,11 @@ const CommentWidget = ({ place }) => {
       )}
 
       <div className="mt-4 border rounded p-2">
+      {/* <Rating
+                        initialValue={rating}
+                        size={20}
+                        onClick={handleRatingChange}
+                    /> */}
         <textarea
           value={comment}
           onChange={handleCommentChange}
