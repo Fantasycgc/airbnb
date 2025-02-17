@@ -49,7 +49,7 @@ const CommentWidget = ({ place }) => {
       const response = await axiosInstance.post('/binh-luan', {
         maPhong: place.id,
         maNguoiBinhLuan: user.id,
-        ngayBinhLuan: currentTime,
+        // ngayBinhLuan: currentTime,
         noiDung: comment,
         // saoBinhLuan: rating,
       });
@@ -122,7 +122,7 @@ const CommentWidget = ({ place }) => {
                                     size={20}
                                 /> */}
                             </div>
-                            <p className="text-sm text-gray-500">{moment(c.ngayBinhLuan).format('DD/MM/YYYY HH:mm')}</p>
+                            {/* <p className="text-sm text-gray-500">{moment(c.ngayBinhLuan).format('DD/MM/YYYY HH:mm')}</p> */}
               
               {editingCommentId === c.id ? ( 
                 <div>
