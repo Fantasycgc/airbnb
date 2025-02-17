@@ -17,7 +17,7 @@ const CommentWidget = ({ place }) => {
         const response = await axiosInstance.get(`/binh-luan/lay-binh-luan-theo-phong/${place.id}`);
         setComments(response.data.content);
       } catch (error) {
-        console.error("Lỗi khi lấy bình luận:", error);
+        console.error("Comment Error:", error);
         toast.error("Comment Error.");
       }
     };
@@ -63,7 +63,7 @@ const CommentWidget = ({ place }) => {
 
   const handleSaveEditComment = async (c) => {
     try {
-      await axiosInstance.put(`/comments/${c.id}`, {
+      await axiosInstance.put(`/binh-luan/${c.id}`, {
         noiDung: editedComment,
       });
 
@@ -84,7 +84,7 @@ const CommentWidget = ({ place }) => {
 
   const handleDeleteComment = async (c) => {
     try {
-      await axiosInstance.delete(`/comments/${c.id}`);
+      await axiosInstance.delete(`/binh-luan/${c.id}`);
 
       // Xóa bình luận khỏi state
       const filteredComments = comments.filter((item) => item.id !== c.id);
@@ -105,7 +105,7 @@ const CommentWidget = ({ place }) => {
         <ul className="space-y-2">
           {comments.map((c) => (
             <li key={c.id} className="border rounded p-2">
-              <div className="font-semibold">{c.nguoiDung?.name || 'Anonymous'}</div>
+              <div className="font-semibold">{c.tenNguoiBinhLuan || 'Anonymous'}</div>
               {editingCommentId === c.id ? ( 
                 <div>
                   <textarea
@@ -128,10 +128,10 @@ const CommentWidget = ({ place }) => {
               {user && user.id === c.maNguoiDung && (
                 <div className="mt-2">
                   <button onClick={() => handleEditComment(c)} className="secondary mr-2">
-                    Sửa
+                    Edit
                   </button>
                   <button onClick={() => handleDeleteComment(c)} className="danger">
-                    Xóa
+                    Delete
                   </button>
                 </div>
               )}
